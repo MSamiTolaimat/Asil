@@ -1,0 +1,7 @@
+public/fonts/SLXVc1nY6HkvangtZmpQdkhzfH5lkSscQyyS4J0.woff2
+public/fonts/SLXVc1nY6HkvangtZmpQdkhzfH5lkSscRiyS.woff2
+public/fonts/SLXVc1nY6HkvangtZmpQdkhzfH5lkSscSCyS4J0.woff2
+public/fonts/zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAI5sdO_q.woff2
+public/fonts/zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAI9sdO_q.woff2
+public/fonts/zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAIFsdA.woff2
+public/fonts/zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAIRsdO_q.woff2

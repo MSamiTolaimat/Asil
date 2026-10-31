@@ -1,0 +1,100 @@
+/* =====================================================
+   رموز التصميم (Design Tokens) — نظام واحد بسمتين
+   تبديل السمة:  data-theme="base" | "youth" | "falcons"
+
+   لوحة أصيل (الأربعة الأساسية — لا تُستعمل ألوان غيرها):
+     فحمي ملكي    #141416   الخلفيات
+     ذهبي عتيق    #D4AF37   الشعار والأزرار والعناصر البارزة
+     برونزي عميق  #8C7355   الحدود والفواصل والظلال والتجسيم
+     سكري فخم     #F4F1EA   النصوص والعناوين
+   ===================================================== */
+
+:root,
+[data-theme="base"] {
+  /* ---------- اللوحة الأساسية ---------- */
+  --charcoal: #141416;
+  --gold: #d4af37;
+  --bronze: #8c7355;
+  --cream: #f4f1ea;
+
+  /* نفس الألوان كقنوات RGB لاستعمال الشفافية: rgb(var(--gold-rgb) / 0.3) */
+  --charcoal-rgb: 20 20 22;
+  --gold-rgb: 212 175 55;
+  --bronze-rgb: 140 115 85;
+  --cream-rgb: 244 241 234;
+
+  /* ---------- درجات مشتقة من الأساسية ---------- */
+  --gold-hi: #e4c75f; /* ذهبي أفتح: التمرير والتدرجات */
+  --gold-hi-rgb: 228 199 95;
+  --gold-lo: #a8892b; /* ذهبي أغمق: بداية التدرجات */
+  --charcoal-2: #1b1b1e; /* سطح مرتفع قليلاً */
+  --charcoal-3: #222226; /* بطاقات وأسطح أعلى */
+  --charcoal-3-rgb: 34 34 38;
+
+  /* ---------- الأدوار ---------- */
+  --bg: var(--charcoal);
+  --bg-2: var(--charcoal-2);
+  --surface: var(--charcoal-3);
+  --text: var(--cream);
+  --text-dim: rgb(var(--cream-rgb) / 0.7);
+
+  --accent: var(--gold);
+  --accent-hi: var(--gold-hi);
+  --accent-text: var(--gold); /* التمييز حين يكون نصاً فوق الخلفية الداكنة */
+  --accent-ink: var(--charcoal); /* النص الداكن فوق الذهبي (الأزرار) */
+
+  --line: rgb(var(--bronze-rgb) / 0.45); /* حدود وفواصل نحيلة */
+  --line-strong: var(--bronze);
+  --shadow-3d: rgb(var(--bronze-rgb) / 0.65); /* ظل التجسيم المصمت */
+  --header-bg: rgb(var(--charcoal-rgb) / 0.78);
+
+  /* ---------- الأشكال ---------- */
+  --radius-s: 4px;
+  --radius-m: 6px;
+  --radius-l: 10px;
+
+  /* ---------- الخطوط ---------- */
+  /* خطان فقط في الموقع كله:
+     ١) الزخرفي (العناوين والأرقام والأزرار): ثمانية Serif Display
+        (تعريفه في fonts.css، وملفاته في src/assets/fonts)
+        للرجوع إلى Reem Kufi: غيّر الاسم الأول في --font-display فقط.
+     ٢) النصوص: IBM Plex Sans Arabic (واضح في الأحجام الصغيرة) */
+  --font-display: "Thmanyah Serif Display", "IBM Plex Sans Arabic", serif;
+  --font-body: "IBM Plex Sans Arabic", "Noto Sans Arabic", sans-serif;
+
+  /* ---------- الحركة ---------- */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --motion: 0.9s;
+
+  font-variant-numeric: tabular-nums;
+}
+
+/* شباب أصيل: ناضج، هادئ، واثق — حواف حادة، حركة بطيئة
+   (الألوان نفسها؛ يختلف الشكل والحركة فقط) */
+[data-theme="youth"] {
+  --bg-2: #19191c;
+  --surface: #1e1e22;
+  --line: rgb(var(--bronze-rgb) / 0.5);
+
+  --radius-s: 0;
+  --radius-m: 3px;
+  --radius-l: 6px;
+
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --motion: 0.9s;
+}
+
+/* صقور أصيل: مرح، دافئ، مشجّع — زوايا مدوّرة، حركة نطّاطة
+   (الألوان نفسها بدرجة دفء أعلى قليلاً في الأسطح) */
+[data-theme="falcons"] {
+  --bg-2: #1b1a19;
+  --surface: #232220;
+  --line: rgb(var(--bronze-rgb) / 0.55);
+
+  --radius-s: 16px;
+  --radius-m: 22px;
+  --radius-l: 28px;
+
+  --ease: cubic-bezier(0.34, 1.56, 0.64, 1); /* spring */
+  --motion: 0.6s;
+}

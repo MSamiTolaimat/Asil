@@ -1,0 +1,420 @@
+/* =====================================================
+   من نحن — السمة المشتركة (base)
+   عنوان وتعريف في المنتصف ← بطاقة الرؤية (يمين) وبطاقة القيم 2×2 (يسار) ← معنى الاسم
+   (ارتفاع الحشوة العلوية لهذا القسم في pages/Home.css)
+   ===================================================== */
+.sec.about {
+  background:
+    radial-gradient(
+      ellipse 60% 40% at 50% 0%,
+      rgb(var(--gold-rgb) / 0.07),
+      transparent 70%
+    ),
+    var(--bg);
+}
+
+.about__head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-inline: auto; /* يتوسّط الصندوق الضيّق فيتساوى العنوان والتعريف مع المنتصف */
+  margin-bottom: clamp(28px, 5vh, 48px);
+  text-align: center;
+}
+.about__head .sec__title,
+.about__head .sec__lead {
+  margin-inline: auto;
+}
+.about__head .sec__lead {
+  max-width: 40rem;
+}
+
+/* فاصل زخرفي: خط ذهبي رفيع يتوسطه معيّن */
+.about__rule {
+  position: relative;
+  display: block;
+  flex: none;
+  width: min(220px, 60%);
+  height: 9px;
+}
+.about__rule::before {
+  content: "";
+  position: absolute;
+  inset: 4px 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgb(var(--gold-rgb) / 0.7) 20%,
+    rgb(var(--gold-rgb) / 0.7) 46%,
+    transparent 48%,
+    transparent 52%,
+    rgb(var(--gold-rgb) / 0.7) 54%,
+    rgb(var(--gold-rgb) / 0.7) 80%,
+    transparent
+  );
+}
+.about__rule::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  translate: -50% 0;
+  rotate: 45deg;
+  background: var(--gold);
+  box-shadow: 0 0 10px rgb(var(--gold-rgb) / 0.6);
+}
+
+/* ---------- البطاقتان: الرؤية أضيق قليلاً من القيم، بالارتفاع نفسه ---------- */
+.about__cards {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(18px, 3vw, 32px);
+  max-width: 1040px;
+  margin-inline: auto;
+}
+/* بطاقة وحيدة لا تتمدد على العرض كله */
+.about__cards:has(> :only-child) {
+  grid-template-columns: minmax(0, 480px);
+  justify-content: center;
+}
+
+.about-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: clamp(24px, 3.4vw, 38px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-l);
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 50% 0%,
+      rgb(var(--gold-rgb) / 0.09),
+      transparent 70%
+    ),
+    linear-gradient(180deg, var(--charcoal-3), var(--charcoal-2));
+  box-shadow: 0 18px 40px rgb(0 0 0 / 0.35);
+  transition:
+    border-color 0.4s,
+    transform var(--motion) var(--ease),
+    box-shadow 0.4s;
+}
+/* خط ذهبي رفيع في أعلى البطاقة */
+.about-card::before {
+  content: "";
+  position: absolute;
+  inset-inline: 28px;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-lo), var(--gold-hi), var(--gold));
+  border-radius: 0 0 2px 2px;
+}
+.about-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow:
+    0 22px 44px rgb(0 0 0 / 0.4),
+    0 0 28px rgb(var(--gold-rgb) / 0.12);
+}
+
+/* ---------- الرؤية ---------- */
+.about-card--vision {
+  justify-content: center;
+  gap: 16px;
+}
+/* علامة مائية: حلقات متحدة المركز في الزاوية */
+.about-card__mark {
+  position: absolute;
+  inset-inline-end: -70px;
+  bottom: -70px;
+  width: 280px;
+  height: 280px;
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1;
+  opacity: 0.1;
+  pointer-events: none;
+}
+.about-card__mark circle,
+.about-card__mark path {
+  vector-effect: non-scaling-stroke;
+}
+
+/* شارة الرؤية: عدسة بحلقات ونبضات دقيقة تدور ببطء، وعين في الوسط */
+.about-card__badge {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 88px;
+  height: 88px;
+  margin-bottom: 4px;
+  color: var(--gold-hi);
+  filter: drop-shadow(0 0 16px rgb(var(--gold-rgb) / 0.28));
+}
+.about-card__lens {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  fill: none;
+  stroke: var(--gold);
+}
+.about-card__orbit {
+  stroke-width: 1.2;
+  fill: rgb(var(--gold-rgb) / 0.06);
+  vector-effect: non-scaling-stroke;
+}
+.about-card__ticks {
+  stroke-width: 6;
+  stroke-dasharray: 2.2 11.8;
+  opacity: 0.7;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: aboutSpin 90s linear infinite;
+}
+.about-card__lens .about-card__ring {
+  fill: var(--charcoal);
+  stroke-width: 1;
+  opacity: 0.95;
+  vector-effect: non-scaling-stroke;
+}
+.about-card__dot {
+  fill: var(--gold);
+  stroke: none;
+}
+.about-card__glyph {
+  position: relative;
+  width: 36px;
+  height: 36px;
+}
+
+.about-card__title {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  color: var(--accent-text);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.4vw, 1.75rem);
+  line-height: 1.4;
+}
+.about-card__title::after {
+  content: "";
+  width: 44px;
+  height: 1px;
+  background: linear-gradient(to left, rgb(var(--gold-rgb) / 0.7), transparent);
+}
+
+/* الرؤية: جملة كبيرة بخط العناوين */
+.about-card__vision {
+  position: relative;
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 2vw, 1.4rem);
+  line-height: 1.95;
+}
+
+/* ---------- القيم: بطاقة كبيرة فيها مربعات 2×2 ---------- */
+.about-card--values {
+  align-items: stretch;
+  justify-content: center;
+  padding: clamp(14px, 2vw, 22px);
+}
+.about-card__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.about-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 16px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  height: 100%;
+}
+.about-value {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: 4px;
+  min-height: 170px;
+  padding: clamp(14px, 1.8vw, 20px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--gold-rgb) / 0.05),
+    rgb(var(--charcoal-rgb) / 0.4)
+  );
+  transition:
+    border-color 0.4s,
+    background 0.4s,
+    transform 0.5s var(--ease);
+}
+.about-value:hover {
+  border-color: var(--gold);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--gold-rgb) / 0.11),
+    rgb(var(--charcoal-rgb) / 0.4)
+  );
+  transform: translateY(-3px);
+}
+/* الرقم: خطوط دقيقة في زاوية المربع */
+.about-value__num {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 14px;
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(var(--bronze-rgb) / 0.75);
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1;
+  transition: -webkit-text-stroke-color 0.4s;
+}
+.about-value:hover .about-value__num {
+  -webkit-text-stroke-color: rgb(var(--gold-rgb) / 0.8);
+}
+/* الأيقونة داخل مربع مدوّر بحدّ ذهبي وتوهج داخلي */
+.about-value__ico {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  margin-bottom: auto;
+  border: 1px solid rgb(var(--gold-rgb) / 0.55);
+  border-radius: 16px;
+  color: var(--gold-hi);
+  background:
+    radial-gradient(circle at 50% 25%, rgb(var(--gold-rgb) / 0.24), transparent 70%),
+    var(--charcoal);
+  box-shadow: inset 0 0 14px rgb(var(--gold-rgb) / 0.14);
+  transition: border-color 0.4s, box-shadow 0.4s;
+}
+.about-value:hover .about-value__ico {
+  border-color: var(--gold);
+  box-shadow:
+    inset 0 0 16px rgb(var(--gold-rgb) / 0.25),
+    0 0 20px rgb(var(--gold-rgb) / 0.25);
+}
+.about-value__icon,
+.about-value__ico .icon {
+  width: 38px;
+  height: 38px;
+  filter: drop-shadow(0 0 6px rgb(var(--gold-rgb) / 0.3));
+  transition: transform 0.5s var(--ease);
+}
+.about-value:hover .about-value__icon,
+.about-value:hover .about-value__ico .icon {
+  transform: translateY(-2px) scale(1.08);
+}
+.about-value b {
+  margin-top: 14px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.about-value__text {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.about__sample {
+  margin: 24px 0 0;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* معنى الاسم: يظهر فقط إن كُتب في ABOUT.nameMeaning */
+.about__name {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  max-width: 42rem;
+  margin: clamp(40px, 7vh, 64px) auto 0;
+  text-align: center;
+}
+.about__name figcaption {
+  color: var(--accent-text);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+}
+.about__name blockquote {
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 1.9vw, 1.3rem);
+  line-height: 2;
+}
+
+@media (max-width: 900px) {
+  .about__cards {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 640px;
+  }
+}
+@media (max-width: 420px) {
+  .about-values {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .about-value {
+    min-height: 0;
+  }
+  .about-value b {
+    margin-top: 10px;
+  }
+}
+/* ---------- حركة هادئة ---------- */
+@keyframes aboutSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes aboutValueIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+/* مربعات القيم تظهر متتابعة بعد ظهور البطاقة */
+.about-card[data-in] .about-value {
+  animation: aboutValueIn 0.8s var(--ease) backwards;
+  animation-delay: calc(0.25s + var(--n, 0) * 0.1s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-card:hover,
+  .about-value:hover {
+    transform: none;
+  }
+  .about-value:hover .about-value__icon,
+  .about-value:hover .about-value__ico .icon {
+    transform: none;
+  }
+  .about-card__ticks,
+  .about-card[data-in] .about-value {
+    animation: none;
+  }
+}

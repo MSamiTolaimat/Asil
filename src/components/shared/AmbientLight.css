@@ -1,0 +1,63 @@
+/* =====================================================
+   ضوء الغروب — شعاع خلفي بطيء يعبر الموقع كله
+   ===================================================== */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 1; /* فوق خلفيات الأقسام، تحت محتواها (.sec__inner: 2) والترويسة (20) */
+  overflow: hidden;
+  pointer-events: none;
+  contain: strict;
+}
+
+.ambient__beam {
+  --from: 125vw; /* نقطة البداية خارج الشاشة يميناً (جهة بداية القراءة) */
+  --to: -85vw; /* نقطة النهاية خارج الشاشة يساراً */
+  position: absolute;
+  top: -30vmax;
+  bottom: -30vmax;
+  left: 0;
+  width: min(46vw, 680px);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(var(--gold-rgb) / 0.035) 26%,
+    rgb(var(--gold-hi-rgb) / 0.085) 50%,
+    rgb(var(--gold-rgb) / 0.035) 74%,
+    transparent 100%
+  );
+  transform: translate3d(var(--from), 0, 0) rotate(16deg);
+  will-change: transform;
+  /* ٧٢ ثانية: نصفها عبور بطيء والنصف الآخر هدوء قبل المرور التالي */
+  animation: ambientSweep 72s cubic-bezier(0.45, 0, 0.35, 1) 3s infinite;
+}
+/* خيط أدق وأسطع يتبع الشعاع بفارق قصير فيمنحه عمقاً */
+.ambient__beam--thin {
+  width: min(9vw, 130px);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--gold-hi-rgb) / 0.07) 50%,
+    transparent
+  );
+  animation-delay: 5.2s;
+}
+.ambient[data-paused] .ambient__beam {
+  animation-play-state: paused;
+}
+
+@keyframes ambientSweep {
+  0% {
+    transform: translate3d(var(--from), 0, 0) rotate(16deg);
+  }
+  50%,
+  100% {
+    transform: translate3d(var(--to), 0, 0) rotate(16deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient {
+    display: none;
+  }
+}

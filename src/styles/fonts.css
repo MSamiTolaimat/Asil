@@ -1,0 +1,36 @@
+/* =====================================================
+   الخطوط
+   • IBM Plex Sans Arabic (النصوص): تأتي من حزمة @fontsource وتُستورد في
+     main.jsx، فيحزّمها Vite مع الموقع ولا حاجة لمجلد public/fonts.
+       npm i @fontsource/ibm-plex-sans-arabic
+   • ثمانية (العناوين): ملفاتها في src/assets/fonts أدناه.
+   ===================================================== */
+
+/* =====================================================
+   ثمانية (Thmanyah Serif Display) — خط العناوين والأرقام والأزرار
+   الملفات داخل src/assets/fonts ويحزّمها Vite مع الموقع عند البناء.
+   تنبيه: ترخيص الخط يقيّد التضمين في الويب؛ راجع الترخيص قبل النشر
+   (للاستثناءات: ask@thmanyah.com). الأوزان المتوفرة: 400 · 500 · 700
+   (الوزن 600 يُعرض 700 تلقائياً).
+   ===================================================== */
+@font-face {
+  font-family: "Thmanyah Serif Display";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../assets/fonts/thmanyahserifdisplay-Regular.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Thmanyah Serif Display";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("../assets/fonts/thmanyahserifdisplay-Medium.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Thmanyah Serif Display";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../assets/fonts/thmanyahserifdisplay-Bold.woff2") format("woff2");
+}

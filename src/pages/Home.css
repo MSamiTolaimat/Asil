@@ -1,0 +1,953 @@
+/* =====================================================
+   الصفحة الرئيسية الواحدة — رحلة بالتمرير
+   الأقسام الخارجية بالسمة المشتركة (base)، وسمتا youth / falcons
+   تُطبَّقان على بطاقتي «من نستهدف» ولوحة التفاصيل (انظر Audience.css)
+   ===================================================== */
+
+.home {
+  position: relative;
+  background: var(--bg);
+  font-family: var(--font-body);
+}
+
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 3px;
+}
+
+/* رابط التخطي للوصول السريع للمحتوى عبر لوحة المفاتيح */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  right: 16px;
+  z-index: 9999;
+  padding: 10px 18px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  border-radius: var(--radius-m);
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+  transition: top 0.25s ease-out;
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  top: 16px;
+  outline: 2px solid var(--accent-hi);
+  outline-offset: 2px;
+}
+
+#main-content:focus {
+  outline: none;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ================= الترويسة ================= */
+.topbar,
+.topbar *,
+.rail,
+.rail * {
+  transition-property:
+    color, background-color, border-color, filter, opacity, transform;
+  transition-duration: 0.25s;
+  transition-timing-function: ease;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 10px clamp(18px, 5vw, 64px);
+  background: var(--header-bg);
+  color: var(--text);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+
+.topbar__brand img {
+  display: block;
+  height: 48px;
+  width: auto;
+  /* لا نُظهر الشعار بتلاشٍ: يحلّ محل الشعار الطائر من المقدمة فوراً */
+  transition-property: filter;
+}
+/* أثناء المقدمة: الشعار الطائر من صفحة الافتتاح هو الذي يستقر هنا */
+.home--intro .topbar__brand img {
+  opacity: 0;
+}
+
+.topbar__brand {
+  flex-shrink: 0;
+}
+
+.topbar__nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(18px, 3vw, 38px);
+  min-width: 0;
+}
+
+.topbar__link {
+  position: relative;
+  padding: 6px 0;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  text-decoration: none;
+}
+.topbar__link::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.45s var(--ease);
+}
+.topbar__link:hover::after,
+.topbar__link:focus-visible::after,
+.topbar__link[data-current]::after {
+  transform: scaleX(1);
+}
+
+.topbar__link:hover,
+.topbar__link:focus-visible {
+  transform: scale(1.08);
+  transform-origin: center;
+}
+
+.topbar__link:active {
+  opacity: 0.7;
+  transform: translateY(1px);
+}
+
+.topbar__cta {
+  padding: 8px 22px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-m);
+  color: var(--accent-text);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.15s;
+}
+.topbar__cta:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+  transform: scale(1.05);
+}
+.topbar__cta:active {
+  transform: scale(0.96) translateY(1px);
+}
+
+.topbar__toggle {
+  display: none;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: none;
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.15s;
+}
+.topbar__toggle:active {
+  transform: scale(0.92);
+}
+
+/* ================= شريط الرحلة (جانبي) ================= */
+.rail {
+  position: fixed;
+  top: 50%;
+  inset-inline-start: clamp(10px, 2vw, 28px);
+  z-index: 15;
+  height: min(44vh, 340px);
+  transform: translateY(-50%);
+  color: var(--text);
+}
+.rail::before,
+.rail::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  border-radius: 2px;
+}
+.rail::before {
+  height: 100%;
+  background: var(--line);
+}
+.rail::after {
+  height: calc(var(--journey, 0) * 100%);
+  background: var(--accent);
+  transition: none;
+}
+.rail ol {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.rail__dot {
+  position: relative;
+  display: block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+}
+.rail__dot[data-active] {
+  background: var(--accent);
+  transform: scale(1.35);
+}
+.rail__dot:active {
+  transform: scale(1.15);
+}
+.rail__label {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  translate: 0 -50%;
+  padding: 3px 10px;
+  border-radius: var(--radius-s);
+  background: var(--header-bg);
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+}
+.rail__dot:hover .rail__label,
+.rail__dot:focus-visible .rail__label {
+  opacity: 1;
+}
+@media (min-width: 1500px) {
+  .rail__dot[data-active] .rail__label {
+    opacity: 1;
+  }
+}
+
+/* ================= قسم عام ================= */
+.sec {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  padding: clamp(88px, 14vh, 148px) clamp(18px, 5vw, 64px)
+    clamp(64px, 10vh, 104px);
+}
+
+/* انتقال لوني ناعم من لون القسم السابق إلى لون هذا القسم */
+.sec[style*="--prev-bg"]::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: clamp(88px, 14vh, 148px);
+  background: linear-gradient(to bottom, var(--prev-bg), transparent);
+  pointer-events: none;
+  z-index: 0; /* تحت ضوء الغروب (AmbientLight: z-index 1) كي لا يحجب الشعاع عند أعلى كل قسم */
+}
+
+.sec__inner {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 1120px);
+  margin-inline: auto;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  color: var(--accent-text);
+  font-size: 0.95rem;
+  letter-spacing: 0;
+}
+
+.sec__head {
+  max-width: 40rem;
+  margin-bottom: clamp(28px, 5vh, 48px);
+}
+
+.sec__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.25;
+}
+.sec__title span {
+  color: var(--accent-text);
+}
+
+.sec__lead {
+  margin: 18px 0 0;
+  color: var(--text-dim);
+  font-size: clamp(1rem, 1.8vw, 1.15rem);
+  line-height: 1.95;
+}
+
+/* ظهور عند التمرير (يستعمل منحنى حركة كل سمة) */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.9s ease,
+    transform var(--motion) var(--ease);
+  transition-delay: calc(var(--i, 0) * 0.12s);
+}
+[data-reveal][data-in] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ================= ١) المكان ================= */
+.hero {
+  display: grid;
+  align-items: center;
+}
+
+.hero__glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      ellipse 55% 55% at 24% 52%,
+      rgb(var(--gold-rgb) / 0.14),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 40% at 50% 112%,
+      rgb(var(--gold-rgb) / 0.28),
+      transparent 70%
+    );
+  pointer-events: none;
+}
+
+.hero__pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--accent);
+  opacity: 0.06;
+  -webkit-mask-image: radial-gradient(circle at 30% 45%, #000, transparent 72%);
+  mask-image: radial-gradient(circle at 30% 45%, #000, transparent 72%);
+  pointer-events: none;
+}
+
+.hero__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: clamp(28px, 6vw, 80px);
+  width: min(100%, 1180px);
+  margin-inline: auto;
+}
+
+.hero__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.3rem, 6.2vw, 4.4rem);
+  line-height: 1.2;
+}
+.hero__title span {
+  display: block;
+  background: linear-gradient(
+    100deg,
+    var(--gold-lo) 0%,
+    var(--gold-hi) 45%,
+    var(--gold) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.hero__lead {
+  max-width: 34em;
+  margin: 22px 0 0;
+  color: var(--text-dim);
+  font-size: clamp(1rem, 1.9vw, 1.2rem);
+  line-height: 1.95;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.chips li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 15px;
+  border: 1px solid rgb(var(--gold-rgb) / 0.32);
+  border-radius: var(--radius-m);
+  background: rgb(var(--charcoal-rgb) / 0.55);
+  font-size: 0.92rem;
+}
+.chips .icon {
+  color: var(--accent-hi);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.btn-primary,
+.btn-ghost {
+  display: inline-block;
+  padding: 14px 34px;
+  border-radius: var(--radius-m);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition:
+    background 0.3s,
+    color 0.3s,
+    box-shadow 0.3s,
+    border-color 0.3s;
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border: 1px solid var(--accent);
+}
+.btn-primary:hover {
+  background: var(--accent-hi);
+  box-shadow: 0 0 30px rgb(var(--gold-rgb) / 0.35);
+}
+.btn-primary:active,
+.btn-ghost:active {
+  transform: scale(0.97) translateY(1px);
+}
+.btn-ghost {
+  border: 1px solid rgb(var(--cream-rgb) / 0.3);
+  color: var(--text);
+}
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent-hi);
+}
+
+/* الشعار الكبير داخل القوس، مع شمس تغيب تحته */
+.hero__visual {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  width: min(100%, 440px);
+  margin-inline: auto;
+}
+.hero__arch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--accent);
+  opacity: 0.5;
+}
+/* الشمس تتنفّس ببطء: الأشعة تخفت وتتوهّج */
+.hero__arch .arch__rays {
+  animation: sunBreath 6s ease-in-out infinite;
+}
+@keyframes sunBreath {
+  50% {
+    opacity: 0.35;
+  }
+}
+/* إطار مؤقت بنفس شكل القوس: حد برونزي رفيع وداخله سطح داكن */
+.hero__placeholder {
+  position: absolute;
+  width: 80%;
+  height: 86%;
+  top: 8%;
+  inset-inline: 10%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 10px;
+  background: var(--line-strong);
+  clip-path: url(#hero-arch-clip);
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  text-align: center;
+}
+.hero__placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: var(--surface);
+  clip-path: url(#hero-arch-clip);
+}
+.hero__placeholder > * {
+  position: relative;
+}
+.hero__placeholder svg {
+  width: 34px;
+  height: 34px;
+  color: var(--accent);
+}
+
+/* صورة المكان داخل إطار القوس؛ تتدرّج أسفلها إلى لون الخلفية */
+.hero__photo {
+  position: relative;
+  width: 80%;
+  height: 86%;
+  margin-top: 6%;
+  object-fit: cover;
+  object-position: center 30%;
+  clip-path: url(#hero-arch-clip);
+  -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  animation: floaty 7s ease-in-out infinite;
+}
+@keyframes floaty {
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.scroll-cue {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 22px;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: max-content;
+  margin-inline: auto;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-decoration: none;
+  animation: nudge 2.4s ease-in-out infinite;
+}
+@keyframes nudge {
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+/* دخول متدرّج للهيرو (backwards كي لا تُثبَّت القيمة النهائية) */
+.rise {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+  animation-delay: calc(0.1s + var(--i, 0) * 0.11s);
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ================= التذييل ================= */
+.site-foot {
+  padding: 48px clamp(18px, 5vw, 64px) 24px;
+  border-top: 1px solid var(--line);
+  background: var(--bg-2);
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.site-foot__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 0.7fr;
+  gap: 40px;
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding-bottom: 36px;
+}
+.site-foot__about {
+  max-width: 24rem;
+}
+.site-foot__brand {
+  display: inline-block;
+  color: var(--accent-hi);
+  font-family: var(--font-display);
+  font-size: 2rem;
+  text-decoration: none;
+}
+.site-foot__about p {
+  margin: 12px 0 0;
+  line-height: 1.9;
+}
+.site-foot h2 {
+  margin: 0 0 16px;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+.site-foot__links {
+  display: grid;
+  gap: 10px;
+}
+.site-foot a,
+.site-foot button {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.2s,
+    transform 0.15s;
+}
+.site-foot a:hover,
+.site-foot a:focus-visible,
+.site-foot button:hover,
+.site-foot button:focus-visible {
+  color: var(--accent-hi);
+}
+.site-foot a:active,
+.site-foot button:active {
+  transform: translateY(1px);
+}
+.site-foot__social > a {
+  color: var(--accent-text);
+}
+.site-foot__socials {
+  display: grid;
+  gap: 10px;
+}
+.site-foot__social-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content !important;
+  min-height: 34px;
+  border: 0 !important;
+  padding: 0 !important;
+  color: var(--text-dim) !important;
+  transition:
+    color 0.2s,
+    transform 0.15s;
+}
+.site-foot__social-link:hover,
+.site-foot__social-link:focus-visible {
+  color: var(--accent-hi) !important;
+}
+.site-foot__social-link:active {
+  transform: scale(0.92);
+}
+.site-foot__social-link .icon {
+  box-sizing: border-box;
+  width: 24px;
+  height: 24px;
+  padding: 5px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+}
+.site-foot__social-link span {
+  font-size: 0.85rem;
+}
+.site-foot__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  width: min(100%, 1120px);
+  margin-inline: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+.site-foot__bottom a {
+  color: var(--accent-text);
+  font-size: 0.8rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ================= الجوال والأجهزة اللوحية ================= */
+@media (max-width: 1100px) {
+  .rail {
+    display: none;
+  }
+}
+
+@media (max-width: 920px) {
+  .hero__inner {
+    grid-template-columns: 1fr;
+  }
+  .hero__visual {
+    order: -1;
+    width: min(70%, 300px);
+  }
+  .scroll-cue {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .topbar__toggle {
+    display: inline-grid;
+  }
+  .topbar__nav {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 8px clamp(18px, 5vw, 64px) 18px;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--line);
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.3s,
+      transform 0.3s,
+      visibility 0.3s;
+  }
+  .topbar__nav.is-open {
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+  }
+  .topbar__link {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar__cta {
+    margin-top: 14px;
+    text-align: center;
+  }
+
+  .site-foot__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 24px;
+  }
+  .site-foot__about {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ================= تقليل الحركة ================= */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise,
+  .hero__arch .arch__rays,
+  .hero__photo,
+  .scroll-cue {
+    animation: none;
+  }
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ===== توزيع قسم المكان: محتوى أكبر ===== */
+.hero__inner {
+  gap: clamp(28px, 5vw, 72px);
+}
+.hero__title {
+  font-size: clamp(2.4rem, 5.6vw, 5rem); /* كان حتى 4.4rem */
+}
+/* القوس يكبر مع ارتفاع الشاشة دون أن يتجاوزها */
+.hero__visual {
+  width: min(100%, 540px, calc(100svh - 69px - 180px));
+}
+@media (max-width: 920px) {
+  .hero__visual {
+    width: min(70%, 300px);
+  }
+}
+
+/* ===== مسافات أوسع بين النص والأزرار (القوس يبقى في منتصف الارتفاع) ===== */
+.hero__lead {
+  margin-top: clamp(22px, 3vh, 32px);
+}
+.chips {
+  margin-top: clamp(28px, 4.5vh, 44px);
+}
+.hero__actions {
+  margin-top: clamp(40px, 7vh, 72px);
+}
+.hero__inner {
+  align-items: center; /* يبقى القوس متوسطاً بالنسبة لعمود النص */
+}
+
+/* =====================================================
+   تحسينات الهيرو (RTL)
+   ===================================================== */
+
+/* ١) شريط النقاط الجانبي على اليمين (جهة بدء القراءة) والعناوين تظهر نحو المحتوى */
+.rail {
+  inset-inline-end: auto;
+  inset-inline-start: clamp(10px, 2vw, 28px);
+}
+.rail__label {
+  left: auto;
+  right: calc(100% + 12px);
+}
+/* على الشاشات الأضيق من ١٢٨٠ يتداخل مع النص، فيُخفى (الناف العلوي يكفي) */
+@media (max-width: 1279px) {
+  .rail {
+    display: none;
+  }
+}
+
+/* ٢) القوس بلا أيقونة ولا نص نائب: سطح داكن بتوهّج ذهبي من الأسفل (مكان الشمس) */
+.hero__placeholder {
+  gap: 0;
+}
+.hero__placeholder::before {
+  background:
+    radial-gradient(
+      ellipse 80% 55% at 50% 100%,
+      rgb(var(--gold-rgb) / 0.22),
+      transparent 70%
+    ),
+    linear-gradient(to bottom, var(--surface), var(--bg));
+}
+
+/* ٣) هرمية النص: كتلة واحدة تبدأ من اليمين، والوصف أضيق من العنوان ومتوازن السطرين */
+.hero__copy {
+  text-align: start;
+}
+.hero__title {
+  text-wrap: balance;
+}
+.hero__lead {
+  max-width: min(25em, 100%);
+  text-align: start;
+  text-wrap: balance;
+}
+
+/* ===== انضباط كتلة النص: الوصف يبدأ من حافة العنوان نفسها ولا يمتد أبعد منه ===== */
+.hero__copy {
+  justify-self: start;
+  text-align: start;
+}
+.hero__title {
+  text-wrap: balance;
+}
+.hero__lead {
+  max-width: 22em; /* كان 34em: سطر واحد أعرض من العنوان */
+  text-align: start;
+  text-wrap: balance;
+}
+
+/* ===== وصل المكان بـ«من نحن»: الضوء لا ينقطع عند حافة القسم =====
+   كان الوهج الذهبي القوي (.28) يلامس حافة الهيرو السفلى ثم يبدأ «من نحن» بخلفية داكنة،
+   فيظهر قطع حادّ. الآن يخفت الوهج قبل الحافة، ويلتقي عندها مع وهج «من نحن» العلوي
+   (نفس الشكل والشدة .07 معكوساً) فيبدوان ضوءاً واحداً متصلاً. */
+.hero__glow {
+  background:
+    radial-gradient(
+      ellipse 55% 55% at 24% 52%,
+      rgb(var(--gold-rgb) / 0.14),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 30% at 50% 78%,
+      rgb(var(--gold-rgb) / 0.1),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 60% 40% at 50% 100%,
+      rgb(var(--gold-rgb) / 0.07),
+      transparent 70%
+    );
+}
+/* «مرّر»: أخفّ حضوراً كي لا تنافس الانتقال */
+.scroll-cue {
+  opacity: 0.75;
+}
+
+/* =====================================================
+   وصل «المكان» بـ«من نحن» دون عنصر وسيط:
+   إزالة الحدّ نفسه بدل إضافة شيء فوقه
+   ===================================================== */
+
+/* ١) النقش يخفت رأسياً قبل الحافة، فلا ينتهي بحدّ مرئي */
+.hero__pattern {
+  -webkit-mask-image:
+    radial-gradient(circle at 30% 45%, #000, transparent 72%),
+    linear-gradient(to bottom, #000 55%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    radial-gradient(circle at 30% 45%, #000, transparent 72%),
+    linear-gradient(to bottom, #000 55%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* ٢) سبب الخط المرئي: «من نحن» يبدأ بلون مسطّح (#141416) بينما الهيرو ينتهي بوهج ذهبي.
+      نُذيب أسفل الهيرو في اللون المسطّح نفسه فلا يبقى فرق عند الحافة. */
+.hero__inner {
+  z-index: 1;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: clamp(180px, 34vh, 340px);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgb(var(--charcoal-rgb) / 0.55) 45%,
+    var(--charcoal) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
